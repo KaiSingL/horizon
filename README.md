@@ -26,17 +26,14 @@ This repo deploys with **GitHub Actions** on every push to `main` or `master`.
 
 ### One-time setup
 
-1. Create a GitHub repository and push this project:
-
-   ```bash
-   git remote add origin https://github.com/<you>/<repo>.git
-   git push -u origin master
-   ```
+1. Push this project to GitHub (repo name becomes the URL path).
 
 2. In the repo: **Settings → Pages → Build and deployment**
-   - **Source:** GitHub Actions
+   - **Source:** Deploy from a branch
+   - **Branch:** `gh-pages` / `/ (root)`  
+   - Save (the `gh-pages` branch appears after the first successful workflow run)
 
-3. Open the **Actions** tab and confirm the “Deploy to GitHub Pages” workflow succeeds.
+3. Open **Actions** and confirm **Deploy to GitHub Pages** is green.
 
 Site URL:
 
@@ -44,11 +41,16 @@ Site URL:
 https://<you>.github.io/<repo>/
 ```
 
-The workflow sets Vite’s `base` to `/<repo>/` so assets resolve correctly under that path. Local `npm run dev` still uses `/`.
+Example: `https://kaisingl.github.io/horizon/`
+
+The workflow runs `npm run build` and publishes only the `dist/` folder (not raw `/src`).  
+Vite `base` is set to `/<repo>/` so scripts load as `/horizon/assets/...`, not `/src/main.js`.
+
+**Do not** point Pages at `master` / root — that serves the unbuilt Vite source and causes `GET .../src/main.js 404`.
 
 ### Manual deploy
 
-You can also run the workflow from **Actions → Deploy to GitHub Pages → Run workflow**.
+**Actions → Deploy to GitHub Pages → Run workflow**.
 
 ## Controls
 
