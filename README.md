@@ -24,29 +24,33 @@ Open the URL Vite prints (usually `http://localhost:5173`).
 
 This repo deploys with **GitHub Actions** on every push to `main` or `master`.
 
-### One-time setup
+### One-time setup (required)
 
-1. Push this project to GitHub (repo name becomes the URL path).
+Open this link on your repo:
 
-2. In the repo: **Settings → Pages → Build and deployment**
-   - **Source:** Deploy from a branch
-   - **Branch:** `gh-pages` / `/ (root)`  
-   - Save (the `gh-pages` branch appears after the first successful workflow run)
+**https://github.com/KaiSingL/horizon/settings/pages**
 
-3. Open **Actions** and confirm **Deploy to GitHub Pages** is green.
+Under **Build and deployment**:
 
-Site URL:
+| Field | Value |
+|--------|--------|
+| **Source** | **Deploy from a branch** |
+| **Branch** | **`gh-pages`** |
+| **Folder** | **`/ (root)`** |
 
-```text
-https://<you>.github.io/<repo>/
-```
+Click **Save**. Wait ~1–2 minutes, then hard-refresh:
 
-Example: `https://kaisingl.github.io/horizon/`
+**https://kaisingl.github.io/horizon/**
 
-The workflow runs `npm run build` and publishes only the `dist/` folder (not raw `/src`).  
-Vite `base` is set to `/<repo>/` so scripts load as `/horizon/assets/...`, not `/src/main.js`.
+#### Why this matters
 
-**Do not** point Pages at `master` / root — that serves the unbuilt Vite source and causes `GET .../src/main.js 404`.
+| Branch | What it contains | Works? |
+|--------|------------------|--------|
+| `master` | Vite **source** (`/src/main.js`) | No — 404 |
+| `gh-pages` | Production **build** (`./assets/...`) | Yes |
+
+If Pages points at `master`, the browser requests `/src/main.js` and fails.  
+The deploy workflow always publishes the built site to `gh-pages`.
 
 ### Manual deploy
 
