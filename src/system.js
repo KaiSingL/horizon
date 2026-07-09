@@ -52,15 +52,16 @@ export function createSolarSystem(scene) {
     bodies: BODIES,
 
     /**
-     * @param {number} days
+     * @param {number} days simulation epoch in days
+     * @param {{ animate?: boolean }} [opts] when animate is false (paused), freeze spin/trails
      */
-    update(days) {
+    update(days, { animate = true } = {}) {
       for (const def of BODIES) {
         const rt = byId.get(def.id);
         if (!rt) continue;
 
         if (def.id === "sun") {
-          rt.mesh.rotation.y += 0.002;
+          if (animate) rt.mesh.rotation.y += 0.002;
           continue;
         }
 
@@ -68,7 +69,7 @@ export function createSolarSystem(scene) {
         rt.pivot.position.set(_pos.x, _pos.y, _pos.z);
 
         // Axial spin proportional to day length (visual)
-        if (def.day !== 0) {
+        if (animate && def.day !== 0) {
           const spin = ((2 * Math.PI) / Math.abs(def.day)) * 0.02 * Math.sign(def.day || 1);
           rt.mesh.rotation.y += spin;
         }
@@ -85,8 +86,8 @@ export function createSolarSystem(scene) {
           }
         }
 
-        // Trails
-        if (rt.trail) {
+        // Trails (only while time advances)
+        if (animate && rt.trail) {
           rt.trail.push(_pos.x, _pos.y, _pos.z);
         }
       }

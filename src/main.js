@@ -325,14 +325,17 @@ function animate() {
   requestAnimationFrame(animate);
   const dt = Math.min(clock.getDelta(), 0.1);
 
-  if (playing && daysPerSecond > 0) {
+  const advancing = playing && daysPerSecond > 0;
+  if (advancing) {
     simDays += daysPerSecond * dt;
   }
 
-  system.update(simDays);
+  // Positions always follow epoch; spin / stars / trails only while advancing
+  system.update(simDays, { animate: advancing });
 
-  // Slow starfield drift for life
-  stars.rotation.y += dt * 0.0015;
+  if (advancing) {
+    stars.rotation.y += dt * 0.0015;
+  }
 
   // Camera cinematic + follow
   if (focusState.active) {
