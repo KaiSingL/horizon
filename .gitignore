@@ -10,7 +10,13 @@ lerna-debug.log*
 node_modules
 dist
 dist-ssr
+docs
+assets
 *.local
+.nojekyll
+# Root favicon is served from public/ via Vite
+/favicon.svg
+
 
 # Editor directories and files
 .vscode/*

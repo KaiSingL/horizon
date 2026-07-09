@@ -1,11 +1,11 @@
-# Horizon — Solar System Observatory (Grok 4.5 Test)
+# Horizon — Solar System Observatory
 
 An interactive Three.js simulation of the solar system with Keplerian orbits, a procedural starfield, adjustable time warp, and a modern glass-style HUD.
 
 ## Features
 
 - **Realistic orbital motion** — elliptical orbits with eccentricity, inclination, ascending node, and argument of periapsis
-- **Time warp** — logarithmic slider from hours/sec to ~100 years/sec, pause, and reset to J2000 epoch
+- **Time warp** — logarithmic slider from ~1 h/s to ~100 years/s (pause is the play button)
 - **Bodies** — Sun, eight planets, Earth’s Moon; Saturn rings; procedural surface textures
 - **Cosmos** — multi-layer starfield, milky band, faint nebula sprites, bloom
 - **Camera** — orbit / zoom / pan, focus any body (`1`–`9`), frame system (`0` or button)
@@ -20,22 +20,23 @@ npm run dev
 
 Open the URL Vite prints (usually `http://localhost:5173`).
 
-## Deploy (GitHub Pages)
+## Deploy (GitHub Pages via Actions)
 
 Site: **https://kaisingl.github.io/horizon/**
 
-On every push to `master`/`main`, GitHub Actions:
+The workflow builds `dist/` and deploys it with the official Pages actions. **No bot commits** on `master`.
 
-1. Builds from source (`vite` always rewrites the entry to `/src/main.js`)
-2. Verifies the bundle is not a stale re-pack of old assets
-3. Commits production `index.html` + `assets/` (+ `docs/`) for branch Pages
-4. Publishes `gh-pages` as well
+### One-time setting
 
-**Settings → Pages:** Deploy from a branch → `master` / `(root)` *or* `/docs` *or* `gh-pages`.
+1. Open **https://github.com/KaiSingL/horizon/settings/pages**
+2. **Build and deployment → Source:** **GitHub Actions** (not “Deploy from a branch”)
+3. Push to `master` (or run **Actions → Deploy to GitHub Pages → Run workflow**)
 
-### Why Pages went stale before
+The build sets Vite `base` to `/horizon/` so assets resolve under the project URL.
 
-Production `index.html` pointed at `./assets/old-bundle.js`. That file was committed for Pages, and the next `vite build` treated it as the entry — so CI kept re-shipping the **old** JS even when `src/` was fixed.
+### Manual deploy
+
+**Actions → Deploy to GitHub Pages → Run workflow**
 
 ## Controls
 

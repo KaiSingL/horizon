@@ -2,9 +2,9 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Horizon — Solar System</title>
+    <title>Horizon ΓÇö Solar System</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -13,9 +13,7 @@
     />
 <<<<<<< HEAD
       =======
-      >>>>>>> fd48c79 (fix: time warp slider never pauses; finer 0–1000 log scale)
-          <script type="module" crossorigin src="./assets/index-DGSuksVs.js"></script>
-          <link rel="stylesheet" crossorigin href="./assets/index-no9mMltN.css">
+      >>>>>>> fd48c79 (fix: time warp slider never pauses; finer 0ΓÇô1000 log scale)
         </head>
   <body>
     <div id="app">
@@ -68,31 +66,31 @@
         <dl class="info-grid" id="info-grid">
           <div>
             <dt>Distance</dt>
-            <dd id="info-distance">—</dd>
+            <dd id="info-distance">ΓÇö</dd>
           </div>
           <div>
             <dt>Period</dt>
-            <dd id="info-period">—</dd>
+            <dd id="info-period">ΓÇö</dd>
           </div>
           <div>
             <dt>Eccentricity</dt>
-            <dd id="info-ecc">—</dd>
+            <dd id="info-ecc">ΓÇö</dd>
           </div>
           <div>
             <dt>Inclination</dt>
-            <dd id="info-incl">—</dd>
+            <dd id="info-incl">ΓÇö</dd>
           </div>
           <div>
             <dt>Radius</dt>
-            <dd id="info-radius">—</dd>
+            <dd id="info-radius">ΓÇö</dd>
           </div>
           <div>
             <dt>Day length</dt>
-            <dd id="info-day">—</dd>
+            <dd id="info-day">ΓÇö</dd>
           </div>
         </dl>
         <p class="info-blurb" id="info-blurb">
-          The Sun anchors the system — a G-type main-sequence star holding eight planets in
+          The Sun anchors the system ΓÇö a G-type main-sequence star holding eight planets in
           Keplerian orbits.
         </p>
       </aside>
@@ -130,7 +128,7 @@
               <span>Day</span>
               <span>Month</span>
               <span>Year</span>
-              <span>×100y</span>
+              <span>├ù100y</span>
             </div>
           </div>
         </div>
@@ -166,8 +164,9 @@
 
       <!-- Help hint -->
       <div class="help-hint" id="help-hint">
-        <kbd>Drag</kbd> orbit · <kbd>Scroll</kbd> zoom · <kbd>Space</kbd> pause · <kbd>1–9</kbd> focus
+        <kbd>Drag</kbd> orbit ┬╖ <kbd>Scroll</kbd> zoom ┬╖ <kbd>Space</kbd> pause ┬╖ <kbd>1ΓÇô9</kbd> focus
       </div>
     </div>
+      <script type="module" src="/src/main.js"></script>
   </body>
 </html>
