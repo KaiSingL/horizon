@@ -24,33 +24,13 @@ Open the URL Vite prints (usually `http://localhost:5173`).
 
 This repo deploys with **GitHub Actions** on every push to `main` or `master`.
 
-### One-time setup (required)
+### GitHub Pages
 
-Open this link on your repo:
+Site: **https://kaisingl.github.io/horizon/**
 
-**https://github.com/KaiSingL/horizon/settings/pages**
+The production build (`index.html` + `assets/`) is committed to `master` so GitHub Pages works even when Source is **Deploy from a branch → master**. The workflow rebuilds and updates those files on every push (`[skip ci]` avoids loops). A `gh-pages` branch is also published.
 
-Under **Build and deployment**:
-
-| Field | Value |
-|--------|--------|
-| **Source** | **Deploy from a branch** |
-| **Branch** | **`gh-pages`** |
-| **Folder** | **`/ (root)`** |
-
-Click **Save**. Wait ~1–2 minutes, then hard-refresh:
-
-**https://kaisingl.github.io/horizon/**
-
-#### Why this matters
-
-| Branch | What it contains | Works? |
-|--------|------------------|--------|
-| `master` | Vite **source** (`/src/main.js`) | No — 404 |
-| `gh-pages` | Production **build** (`./assets/...`) | Yes |
-
-If Pages points at `master`, the browser requests `/src/main.js` and fails.  
-The deploy workflow always publishes the built site to `gh-pages`.
+Local development still works: `npm run dev` rewrites the production script tags back to `/src/main.js` for HMR.
 
 ### Manual deploy
 
