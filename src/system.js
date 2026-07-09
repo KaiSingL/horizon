@@ -53,28 +53,29 @@ export function createSolarSystem(scene) {
 
     /**
      * @param {number} days simulation epoch in days
-     * @param {{ animate?: boolean }} [opts] when animate is false (paused), freeze spin/trails
+     * @param {{ animate?: boolean }} [opts] when animate is false (paused), skip trail sampling
      */
     update(days, { animate = true } = {}) {
       for (const def of BODIES) {
         const rt = byId.get(def.id);
         if (!rt) continue;
 
+        // Axial rotation from absolute sim time: one full turn per |day| Earth-days.
+        // Negative day length (Venus, Uranus-ish retrograde convention) → opposite spin.
+        // Independent of frame rate; scales correctly with time warp.
+        if (def.day !== 0) {
+          const turns = days / def.day; // signed: negative day → negative angle
+          rt.mesh.rotation.y = turns * Math.PI * 2;
+        }
+
         if (def.id === "sun") {
-          if (animate) rt.mesh.rotation.y += 0.002;
           continue;
         }
 
         heliocentricPosition(def, days, AU, _pos);
         rt.pivot.position.set(_pos.x, _pos.y, _pos.z);
 
-        // Axial spin proportional to day length (visual)
-        if (animate && def.day !== 0) {
-          const spin = ((2 * Math.PI) / Math.abs(def.day)) * 0.02 * Math.sign(def.day || 1);
-          rt.mesh.rotation.y += spin;
-        }
-
-        // Moons
+        // Moons: mean anomaly from epoch (same Keplerian time base as planets)
         if (rt.moons) {
           for (const m of rt.moons) {
             const ang = (days / m.period) * Math.PI * 2;
