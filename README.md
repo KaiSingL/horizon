@@ -22,19 +22,20 @@ Open the URL Vite prints (usually `http://localhost:5173`).
 
 ## Deploy (GitHub Pages)
 
-This repo deploys with **GitHub Actions** on every push to `main` or `master`.
-
-### GitHub Pages
-
 Site: **https://kaisingl.github.io/horizon/**
 
-The production build (`index.html` + `assets/`) is committed to `master` so GitHub Pages works even when Source is **Deploy from a branch → master**. The workflow rebuilds and updates those files on every push (`[skip ci]` avoids loops). A `gh-pages` branch is also published.
+On every push to `master`/`main`, GitHub Actions:
 
-Local development still works: `npm run dev` rewrites the production script tags back to `/src/main.js` for HMR.
+1. Builds from source (`vite` always rewrites the entry to `/src/main.js`)
+2. Verifies the bundle is not a stale re-pack of old assets
+3. Commits production `index.html` + `assets/` (+ `docs/`) for branch Pages
+4. Publishes `gh-pages` as well
 
-### Manual deploy
+**Settings → Pages:** Deploy from a branch → `master` / `(root)` *or* `/docs` *or* `gh-pages`.
 
-**Actions → Deploy to GitHub Pages → Run workflow**.
+### Why Pages went stale before
+
+Production `index.html` pointed at `./assets/old-bundle.js`. That file was committed for Pages, and the next `vite build` treated it as the entry — so CI kept re-shipping the **old** JS even when `src/` was fixed.
 
 ## Controls
 

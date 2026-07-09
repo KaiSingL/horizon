@@ -1,32 +1,54 @@
 import { defineConfig } from "vite";
 
 /**
- * Production index.html (committed for GitHub Pages on master) references
- * hashed ./assets/* bundles. During `vite dev`, rewrite those tags back to
- * the source entry so HMR still works.
+ * Force the Vite entry to always be /src/main.js.
+ *
+ * GitHub Pages needs a production index.html (./assets/*.js) on master.
+ * If that file is also used as the Vite input, `vite build` re-bundles the
+ * *previous* asset instead of source — Pages stays stale forever.
+ *
+ * This plugin rewrites any production script/link tags back to the source
+ * entry before Vite resolves the graph (dev + build).
  */
-function pagesDevEntry() {
+function forceSourceEntry() {
   return {
-    name: "pages-dev-entry",
+    name: "force-source-entry",
     transformIndexHtml: {
       order: "pre",
-      handler(html, ctx) {
-        if (!ctx.server) return html;
-        return html
-          .replace(
-            /<script type="module"[^>]*src="\.\/assets\/[^"]*"><\/script>\s*/g,
-            '<script type="module" src="/src/main.js"><\/script>\n'
-          )
-          .replace(/<link rel="stylesheet"[^>]*href="\.\/assets\/[^"]*">\s*/g, "");
+      handler(html) {
+        let out = html;
+        // Drop production bundles if present
+        out = out.replace(
+          /<script type="module"[^>]*src="\.\/assets\/[^"]*"><\/script>\s*/g,
+          ""
+        );
+        out = out.replace(
+          /<link rel="stylesheet"[^>]*href="\.\/assets\/[^"]*">\s*/g,
+          ""
+        );
+        // Normalize favicon to public file
+        out = out.replace(
+          /href="\.\/assets\/favicon[^"]*"/g,
+          'href="/favicon.svg"'
+        );
+        out = out.replace(/href="\.\/favicon\.svg"/g, 'href="/favicon.svg"');
+        // Ensure source entry exists once
+        if (!out.includes('src="/src/main.js"') && !out.includes("src='/src/main.js'")) {
+          out = out.replace(
+            "</body>",
+            '    <script type="module" src="/src/main.js"></script>\n  </body>'
+          );
+        }
+        return out;
       },
     },
   };
 }
 
 export default defineConfig({
-  // Relative paths so GitHub Pages project sites work without absolute /repo/ base
   base: "./",
-  plugins: [pagesDevEntry()],
+  publicDir: "public",
+  plugins: [forceSourceEntry()],
   build: {
     outDir: "dist",
     sourcemap: false,
