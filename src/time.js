@@ -1,30 +1,29 @@
 /**
  * Logarithmic time-warp mapping for the control slider.
- * Slider 0..100 → days per second (0 at low end = paused feel, but play still gates).
+ * Slider 0..SLIDER_MAX → days per second (always > 0; pause is the play button only).
  */
 
-/** Map slider value 0–100 to days/second */
-export function sliderToDaysPerSecond(value) {
-  const t = Math.max(0, Math.min(100, value)) / 100;
-  if (t <= 0.02) return 0;
+/** Integer slider range — higher = finer control on a log curve */
+export const SLIDER_MAX = 1000;
 
-  // Curve: ~1 hour/s → 1 day/s → 1 year/s → 100 years/s
-  // Use piecewise log from 1/24 day/s to 36500 day/s
-  const min = 1 / 24; // 1 hour per second
-  const max = 365.25 * 100; // 100 years per second
-  const logMin = Math.log(min);
-  const logMax = Math.log(max);
-  const u = (t - 0.02) / 0.98;
-  return Math.exp(logMin + u * (logMax - logMin));
+const MIN_DAYS_PER_SEC = 1 / 24; // 1 hour of sim per real second
+const MAX_DAYS_PER_SEC = 365.25 * 100; // 100 years per second
+
+/** Map slider value 0–SLIDER_MAX to days/second (never zero). */
+export function sliderToDaysPerSecond(value) {
+  const t = Math.max(0, Math.min(SLIDER_MAX, Number(value))) / SLIDER_MAX;
+  const logMin = Math.log(MIN_DAYS_PER_SEC);
+  const logMax = Math.log(MAX_DAYS_PER_SEC);
+  return Math.exp(logMin + t * (logMax - logMin));
 }
 
-/** Inverse: days/s → slider 0–100 */
+/** Inverse: days/s → slider 0–SLIDER_MAX */
 export function daysPerSecondToSlider(daysPerSec) {
-  if (daysPerSec <= 0) return 0;
-  const min = 1 / 24;
-  const max = 365.25 * 100;
-  const u = (Math.log(daysPerSec) - Math.log(min)) / (Math.log(max) - Math.log(min));
-  return Math.max(0, Math.min(100, 2 + u * 98));
+  const d = Math.max(MIN_DAYS_PER_SEC, Math.min(MAX_DAYS_PER_SEC, daysPerSec));
+  const u =
+    (Math.log(d) - Math.log(MIN_DAYS_PER_SEC)) /
+    (Math.log(MAX_DAYS_PER_SEC) - Math.log(MIN_DAYS_PER_SEC));
+  return Math.round(u * SLIDER_MAX);
 }
 
 export function formatWarp(daysPerSec) {
@@ -43,7 +42,6 @@ export function formatWarp(daysPerSec) {
     return `${fmt(daysPerSec / 30.44)} mo / s`;
   }
   const years = daysPerSec / 365.25;
-  if (years < 10) return `${fmt(years)} yr / s`;
   return `${fmt(years)} yr / s`;
 }
 

@@ -10,6 +10,8 @@ import { createStarfield } from "./starfield.js";
 import { createSolarSystem } from "./system.js";
 import {
   sliderToDaysPerSecond,
+  daysPerSecondToSlider,
+  SLIDER_MAX,
   formatWarp,
   formatEpoch,
   formatPeriod,
@@ -78,7 +80,8 @@ composer.addPass(new OutputPass());
 // ── Simulation state ──────────────────────────────────────────────
 let simDays = 0;
 let playing = true;
-let daysPerSecond = sliderToDaysPerSecond(35);
+// Default ~1 day/s (mapped on the fine log slider)
+let daysPerSecond = sliderToDaysPerSecond(daysPerSecondToSlider(1));
 let focusId = "sun";
 let labelsVisible = true;
 
@@ -156,6 +159,11 @@ function buildUI() {
   }
 
   $("body-count").textContent = String(system.bodies.length);
+  // Fine log slider 0…SLIDER_MAX (no pause zone — use the play button)
+  elSlider.min = "0";
+  elSlider.max = String(SLIDER_MAX);
+  elSlider.step = "1";
+  elSlider.value = String(daysPerSecondToSlider(daysPerSecond));
   updateInfo(focusId);
   syncPlayUI();
   syncWarpLabels();
@@ -325,7 +333,8 @@ function animate() {
   requestAnimationFrame(animate);
   const dt = Math.min(clock.getDelta(), 0.1);
 
-  const advancing = playing && daysPerSecond > 0;
+  // Pause is only the play button; slider always maps to a positive warp
+  const advancing = playing;
   if (advancing) {
     simDays += daysPerSecond * dt;
   }

@@ -11,9 +11,12 @@
       href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Outfit:wght@300;400;500;600&display=swap"
       rel="stylesheet"
     />
-      <script type="module" crossorigin src="./assets/index-b1sYjUUL.js"></script>
-      <link rel="stylesheet" crossorigin href="./assets/index-no9mMltN.css">
-    </head>
+<<<<<<< HEAD
+      =======
+      >>>>>>> fd48c79 (fix: time warp slider never pauses; finer 0–1000 log scale)
+        <script type="module" crossorigin src="./assets/index-DGSuksVs.js"></script>
+        <link rel="stylesheet" crossorigin href="./assets/index-no9mMltN.css">
+      </head>
   <body>
     <div id="app">
       <canvas id="c"></canvas>
@@ -119,16 +122,13 @@
             </div>
             <input
               type="range"
-              id="time-slider"
-              min="0"
-              max="100"
-              value="35"
+              id="time-slider" min="0" max="1000" step="1" value="350"
               aria-label="Time speed"
             />
             <div class="slider-ticks">
-              <span>Pause</span>
-              <span>Hour</span>
+              <span>1 h/s</span>
               <span>Day</span>
+              <span>Month</span>
               <span>Year</span>
               <span>×100y</span>
             </div>
