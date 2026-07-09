@@ -1,4 +1,4 @@
-# Horizon — Solar System Observatory
+# Horizon — Solar System Observatory (Grok 4.5 Test)
 
 An interactive Three.js simulation of the solar system with Keplerian orbits, a procedural starfield, adjustable time warp, and a modern glass-style HUD.
 
@@ -19,6 +19,36 @@ npm run dev
 ```
 
 Open the URL Vite prints (usually `http://localhost:5173`).
+
+## Deploy (GitHub Pages)
+
+This repo deploys with **GitHub Actions** on every push to `main` or `master`.
+
+### One-time setup
+
+1. Create a GitHub repository and push this project:
+
+   ```bash
+   git remote add origin https://github.com/<you>/<repo>.git
+   git push -u origin master
+   ```
+
+2. In the repo: **Settings → Pages → Build and deployment**
+   - **Source:** GitHub Actions
+
+3. Open the **Actions** tab and confirm the “Deploy to GitHub Pages” workflow succeeds.
+
+Site URL:
+
+```text
+https://<you>.github.io/<repo>/
+```
+
+The workflow sets Vite’s `base` to `/<repo>/` so assets resolve correctly under that path. Local `npm run dev` still uses `/`.
+
+### Manual deploy
+
+You can also run the workflow from **Actions → Deploy to GitHub Pages → Run workflow**.
 
 ## Controls
 
