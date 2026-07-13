@@ -45,6 +45,14 @@ jobs:
             echo "::error::Bundle still has old spin fudge"
             exit 1
           fi
+          if grep -q '/src/main\.js' dist/index.html; then
+            echo "::error::Built index.html still references /src/main.js — entry was not bundled"
+            exit 1
+          fi
+          if ! grep -q "assets/index-" dist/index.html; then
+            echo "::error::Built index.html has no bundled asset reference — build may be broken"
+            exit 1
+          fi
           touch dist/.nojekyll
           test -f dist/index.html
 
